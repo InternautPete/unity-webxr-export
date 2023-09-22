@@ -35,11 +35,17 @@ namespace WebXR.Interactions
 
     [Header("Input Bindings")]
     [SerializeField] private WebXRController.ButtonTypes[] defaultPickupButtons = new WebXRController.ButtonTypes[] {
-      WebXRController.ButtonTypes.Trigger,
+      
       WebXRController.ButtonTypes.Grip,
       WebXRController.ButtonTypes.ButtonA
     };
     private WebXRController.ButtonTypes[] pickupButtons;
+    [SerializeField] private WebXRController.ButtonTypes[] defaultOperateButtons = new WebXRController.ButtonTypes[] {
+      WebXRController.ButtonTypes.Trigger,
+      
+      WebXRController.ButtonTypes.ButtonB
+    };
+    private WebXRController.ButtonTypes[] operateButtons;
 
     private Vector3 currentVelocity;
     private Vector3 previousPos;
@@ -64,6 +70,7 @@ namespace WebXR.Interactions
       hasAnimator = animator != null;
       controller = gameObject.GetComponent<WebXRController>();
       pickupButtons = defaultPickupButtons;
+      operateButtons = defaultOperateButtons;
 #if WEBXR_INPUT_PROFILES
       if (inputProfileObject != null)
       {
@@ -122,7 +129,13 @@ namespace WebXR.Interactions
       float normalizedTime = controller.GetButton(WebXRController.ButtonTypes.ButtonA) ? 1 :
                               Mathf.Max(controller.GetAxis(WebXRController.AxisTypes.Trigger),
                               controller.GetAxis(WebXRController.AxisTypes.Grip));
-      
+      bool operate = false;
+      for (int i= 0; i<operateButtons.Length; i++={
+        operate = operate || controller.GetButtonDown(operateButtons[i]);
+      }
+      if(operate){
+        Operate();
+      }
       bool pickup = false;
       for (int i = 0; i < pickupButtons.Length; i++) {
         pickup = pickup || controller.GetButtonDown(pickupButtons[i]);
@@ -536,7 +549,14 @@ namespace WebXR.Interactions
       inputProfileModel.SetAxisValue(index, controller.GetAxisIndexValue(index));
     }
 #endif
+    public void Operate(){
+      if(GameObject.FindGameObjectWithTag("Player").TryGetComponent(out BalloonController bCtrl){
+        //handle reverse parenting and operation of opject
+        bCtrl.DoBurner();
+      }
+    }
 
+    
     public void Pickup()
     {
       currentRigidBody = GetNearestRigidBody();
