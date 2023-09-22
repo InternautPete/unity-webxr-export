@@ -130,7 +130,7 @@ namespace WebXR.Interactions
                               Mathf.Max(controller.GetAxis(WebXRController.AxisTypes.Trigger),
                               controller.GetAxis(WebXRController.AxisTypes.Grip));
       bool operate = false;
-      for (int i= 0; i<operateButtons.Length; i++={
+      for (int i= 0; i<operateButtons.Length; i++){
         operate = operate || controller.GetButtonDown(operateButtons[i]);
       }
       if(operate){
