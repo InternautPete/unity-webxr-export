@@ -550,7 +550,7 @@ namespace WebXR.Interactions
     }
 #endif
     public void Operate(){
-      if(GameObject.FindGameObjectWithTag("Player").TryGetComponent(out BalloonController bCtrl){
+      if(GameObject.FindGameObjectWithTag("Player").TryGetComponent(out BalloonController bCtrl)){
         //handle reverse parenting and operation of opject
         bCtrl.DoBurner();
       }
